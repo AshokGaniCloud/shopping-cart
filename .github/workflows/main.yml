@@ -89,6 +89,11 @@ jobs:
         uses: s4u/maven-settings-action@v2.8.0
         with:
           servers: '[{"id": "nexus", "username": "${env.NEXUS_USERNAME}", "password": "${env.NEXUS_PASSWORD}"}]'
+      - name: Create settings.xml
+        run: |
+           mkdir -p ~/.m2
+           echo '<settings><servers><server><id>nexus</id><username>${{ secrets.ARTIFACTUSER}}</username><password>${{ secrets.NEXUS_PASSWORD }}</password></server></servers></settings>' > ~/.m2/settings.xml
+
       - name: Deploy
         run: mvn deploy -s .m2/settings.xml
  
