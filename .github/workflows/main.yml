@@ -5,8 +5,7 @@ on:
     branches:
       - master
   pull_request:
-    branches:
-      - master
+     types: [opened, synchronize, reopened]
 
 jobs:
   Build:
@@ -24,10 +23,13 @@ jobs:
       - name: Checkout Self
         uses: actions/checkout@v4
       - name: Setup java
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v3
         with:
           java-version: '17'
           distribution: 'temurin'
+          server-id: nexus
+          server-username: NEXUS_USER
+          server-password: NEXUS_PASSWORD
           cache: 'maven'
       - name: Build Package
         run: mvn -B package -f pom.xml
@@ -53,7 +55,21 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
         run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=JavaApp -Dsonar.projectName='JavaApp'
-          
+      - name: SonarQube Quality Gate check
+        id: sonarqube-quality-gate-check
+        uses: sonarsource/sonarqube-quality-gate-action@master
+        with:
+          pollingTimeoutSec: 600
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}    
+      - name: "Example show SonarQube Quality Gate Status value"
+        run: echo "The Quality Gate status is ${{ steps.sonarqube-quality-gate-check.outputs.quality-gate-status }}"
+      - name: Publish package
+        run: mvn deploy
+        env:
+          NEXUS_USERNAME: ${{ secrets.NEXUS_USER }}
+          NEXUS_PASSWORD: ${{ secrets.NEXUS_PASSWORD }}
         
       
     
