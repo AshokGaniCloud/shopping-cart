@@ -37,7 +37,7 @@ jobs:
         run: |
            mkdir -p ~/.m2
            echo '<settings><servers><server><id>nexus</id><username>${{ secrets.ARTIFACTUSER}}</username><password>${{ secrets.NEXUS_PASSWORD }}</password></server></servers></settings>' > ~/.m2/settings.xml
-      - uses: actions/cache@v2
+      - uses: actions/cache@v4
         with:
           path: ~/.m2/repository
           key: maven-${{ hashFiles('**/pom.xml') }}
