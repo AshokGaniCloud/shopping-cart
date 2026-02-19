@@ -9,8 +9,8 @@
 	<properties>
 		
 		<sonar.host.url>http://20.29.42.137:9000/</sonar.host.url>
-		<sonar.login>admin</sonar.login>
-		<sonar.password>squ_0fa5266245fceb39b83ece707bfba011a16a2ea0</sonar.password> 
+		
+		<sonar.token>squ_0fa5266245fceb39b83ece707bfba011a16a2ea0</sonar.token> 
 		
 
 	</properties>
@@ -87,7 +87,11 @@
 			<artifactId>mysql-connector-java</artifactId>
 			<version>8.0.33</version>
 		</dependency>
-
+        <dependency>
+		    <groupId>org.sonarsource.scanner.maven</groupId>
+		    <artifactId>sonar-maven-plugin</artifactId>
+		    <version>5.5.0.6356</version>
+        </dependency>
 
 		<dependency>
 			<groupId>javax.servlet</groupId>
