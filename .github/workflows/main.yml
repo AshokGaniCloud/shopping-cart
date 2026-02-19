@@ -32,9 +32,12 @@ jobs:
       - name: Build Package
         run: mvn -B package -f pom.xml
       - name: Synk tool Install
-        uses: snyk/actions/setup@806182742461562b67788a64410098c9d9b96adb
+        uses: snyk/actions/node@master
         env:
            SYNK_TOKEN: ${{secrets.SYNC_TOKEN}}
+        with:
+          command: test
+          args: --severity-threshold=high
       - name: Synk Monitor All Projects
         run: snyk monitor --all-projects --org=dbe05283-8d6b-46f1-8729-2758fbfd9a26
       - name: Synk Test
