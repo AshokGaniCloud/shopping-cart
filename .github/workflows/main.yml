@@ -1,5 +1,9 @@
 name: Build And Deploy Java App
 
+env:
+  NEXUS_USERNAME: 'admin'
+  NEXUS_PASSWORD: 'nexus123'
+
 on:
   push:
     branches:
@@ -27,14 +31,19 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
-          server-id: nexus
-          server-username: ARTIFACTUSER
-          server-password: NEXUS_PASSWORD
           cache: 'maven'
       - name: Build Package
         run: mvn -B package -f pom.xml
+      - name: Synk Install
+        run: |
+          curl https://static.snyk.io/cli/latest/snyk-linux -o snyk
+          chmod +x ./snyk
+          mv ./snyk /usr/local/bin/
+        continue-on-error: true
+
       - name: Synk tool Install
-        uses: snyk/actions/maven@master
+        run: |
+          synk auth
         env:
            SYNK_TOKEN: ${{secrets.SYNC_TOKEN}}
         continue-on-error: true
@@ -73,15 +82,17 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}  
-        continue-on-error: true
+        
       - name: "Example show SonarQube Quality Gate Status value"
         run: echo "The Quality Gate status is ${{ steps.sonarqube-quality-gate-check.outputs.quality-gate-status }}"
-        continue-on-error: true
-      - name: Publish package
-        run: mvn deploy
-        env:
-          NEXUS_USERNAME: ${{ secrets.ARTIFACTUSER }}
-          NEXUS_PASSWORD: ${{ secrets.NEXUS_PASSWORD }}
+      - name: Maven Settings
+        uses: s4u/maven-settings-action@v2.8.0
+        with:
+          servers: '[{"id": "nexus", "username": "${env.NEXUS_USERNAME}", "password": "${env.NEXUS_PASSWORD}"}]'
+      - name: Deploy
+        run: mvn deploy -s .m2/settings.xml
+ 
+     
         
       
     
