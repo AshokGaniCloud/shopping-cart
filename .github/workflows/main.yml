@@ -117,7 +117,7 @@ jobs:
           password: ${{ env.DOCKER_PASSWORD}}
       - name: Build Image And Push
         run: |
-           docker build -t javawebpp:v1 .
+           docker build -t javawebapp:v1 .
            docker images
            docker tag javawebapp:v1 ashokgani6300/javawebapp:v1
            echo ${{ env.DOCKER_PASSWORD }} | docker login -u ${{ env.DOCKER_USERNAME }} --password-stdin docker.io
