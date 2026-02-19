@@ -6,6 +6,14 @@
 	<packaging>war</packaging>
 	<name>Shopping Cart</name>
 	<description>A Shopping Cart Project in Java by Bitter Code</description>
+	<properties>
+		
+		<sonar.host.url>http://20.29.42.137:9000/</sonar.host.url>
+		<sonar.login>admin</sonar.login>
+		<sonar.password>squ_0fa5266245fceb39b83ece707bfba011a16a2ea0</sonar.password> 
+		
+
+	</properties>
 	<build>
 		<sourceDirectory>src</sourceDirectory>
 		<resources>
@@ -34,6 +42,22 @@
 			</plugin>
 		</plugins>
 	</build>
+
+	<distributionManagement>
+	
+	    <repository>
+	      <id>nexus</id>
+	      <name>Mithun Technologies Releases Nexus Repository</name>
+	      <url>http://20.109.40.150:8081/repository/mavensnap/</url>
+	    </repository>
+	    
+	    <snapshotRepository>
+	      <id>nexus</id>
+	      <name>Mithun Technologies Snapshot Nexus Repository </name>
+	      <url>http://20.109.40.150:8081/repository/mavenrelease/</url>
+	    </snapshotRepository>
+	    
+	</distributionManagement>
 
 	<dependencies>
 		<dependency>
