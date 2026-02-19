@@ -28,7 +28,7 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
           server-id: nexus
-          server-username: NEXUS_USER
+          server-username: ARTIFACTUSER
           server-password: NEXUS_PASSWORD
           cache: 'maven'
       - name: Build Package
@@ -80,7 +80,7 @@ jobs:
       - name: Publish package
         run: mvn deploy
         env:
-          NEXUS_USERNAME: ${{ secrets.NEXUS_USER }}
+          NEXUS_USERNAME: ${{ secrets.ARTIFACTUSER }}
           NEXUS_PASSWORD: ${{ secrets.NEXUS_PASSWORD }}
         
       
